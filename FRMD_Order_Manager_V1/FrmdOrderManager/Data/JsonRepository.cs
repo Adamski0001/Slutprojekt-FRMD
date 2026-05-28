@@ -13,7 +13,7 @@ public class JsonRepository<T> : IRepository<T> where T : class
     public JsonRepository(string filePath)
     {
         _filePath = filePath;
-        // WriteIndented gör att JSON-filen blir lättare att läsa för en människa.
+        // WriteIndented gör att JSON-filen blir lättare att läsa.
         _options = new JsonSerializerOptions
         {
             WriteIndented = true,
