@@ -28,18 +28,27 @@ public partial class MainForm : Form
         string dataDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "DataFiles");
 
         ValidationService validationService = new ValidationService();
-        _productService = new ProductService();
 
-        // JsonRepository<T> är generisk så samma klass fungerar för Customer och Order.
+        // JsonRepository<T> är generisk så samma klass fungerar för Customer, Order och Product.
         JsonRepository<Customer> customerRepo = new JsonRepository<Customer>(Path.Combine(dataDirectory, "customers.json"));
         JsonRepository<Order> orderRepo = new JsonRepository<Order>(Path.Combine(dataDirectory, "orders.json"));
+        JsonRepository<Product> productRepo = new JsonRepository<Product>(Path.Combine(dataDirectory, "products.json"));
 
+        _productService = new ProductService(productRepo, validationService);
         _customerService = new CustomerService(customerRepo, validationService);
         _orderService = new OrderService(orderRepo, validationService);
 
         ApplyTheme();
+        InitializeProductForm();
+        InitializeOrderForm();
         LoadProductsIntoUi();
         RefreshAllViews();
+    }
+
+    // Fyller statusdropdownen i Orders-fliken med alla värden från OrderStatus-enumen.
+    private void InitializeOrderForm()
+    {
+        cmbStatus.DataSource = Enum.GetValues(typeof(OrderStatus));
     }
 
     // Lägger på färger, KPI-kort och tabellstyling efter att Designer-filen ritat upp controlsen.
@@ -59,6 +68,8 @@ public partial class MainForm : Form
         StyleButton(btnAddCustomer);
         StyleButton(btnCreateOrder);
         StyleButton(btnUpdateStatus);
+        StyleButton(btnAddProduct);
+        StyleButton(btnRemoveProduct);
 
         StyleGridOrders();
         ConfigureToolTips();
@@ -140,6 +151,15 @@ public partial class MainForm : Form
 
         _toolTip.SetToolTip(cmbStatus, "Den nya statusen för den valda ordern.");
         _toolTip.SetToolTip(btnUpdateStatus, "Spara statusbytet på den markerade ordern.");
+
+        _toolTip.SetToolTip(cmbProductCategory, "Vilken typ av produkt ska läggas till?");
+        _toolTip.SetToolTip(txtProductLocation, "Plats produkten gäller, t.ex. \"Åre\".");
+        _toolTip.SetToolTip(numProductBasePrice, "Utgångspris i kronor.");
+        _toolTip.SetToolTip(cmbProductSize, "Karttavlans storlek – Medium ger +100 kr, Large +250 kr.");
+        _toolTip.SetToolTip(chkProductGiftWrap, "Lägger till 25 kr på priset.");
+        _toolTip.SetToolTip(numProductComplexity, "1 = enkel, 5 = mycket detaljerad. Varje steg ger +150 kr.");
+        _toolTip.SetToolTip(btnAddProduct, "Lägg till produkten i katalogen.");
+        _toolTip.SetToolTip(btnRemoveProduct, "Ta bort den valda produkten ur katalogen.");
     }
 
     // Formaterar ett belopp som svensk valuta, t.ex. "1 234,50 kr".
@@ -286,6 +306,117 @@ public partial class MainForm : Form
         }
 
         cmbStatus.SelectedItem = selectedOrder.Status;
+    }
+
+    // Fyller dropdownsen i Products-fliken som inte ändras under körningen.
+    // Kör en gång vid start så att kategorin och storleksvalen finns redo.
+    private void InitializeProductForm()
+    {
+        cmbProductCategory.DataSource = Enum.GetValues(typeof(ProductCategory));
+        cmbProductSize.DataSource = new List<string> { "Small", "Medium", "Large" };
+        cmbProductSize.SelectedItem = "Medium";
+
+        // Sätter SelectedIndex sist så att SelectedIndexChanged kör och visar rätt fält.
+        cmbProductCategory.SelectedIndex = 0;
+    }
+
+    // Visar bara de inmatningsfält som hör till den valda kategorin.
+    private void cmbProductCategory_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        if (cmbProductCategory.SelectedItem == null)
+        {
+            return;
+        }
+
+        ProductCategory category = (ProductCategory)cmbProductCategory.SelectedItem;
+
+        bool isMapFrame = category == ProductCategory.MapFrame;
+        bool isKeyring = category == ProductCategory.Keyring;
+        bool isCustomMap = category == ProductCategory.CustomMap;
+
+        lblProductSize.Visible = isMapFrame;
+        cmbProductSize.Visible = isMapFrame;
+
+        lblProductGiftWrap.Visible = isKeyring;
+        chkProductGiftWrap.Visible = isKeyring;
+
+        lblProductComplexity.Visible = isCustomMap;
+        numProductComplexity.Visible = isCustomMap;
+
+        // CustomMap använder begreppet "requested location" i stället för "location".
+        lblProductLocation.Text = isCustomMap ? "Requested location" : "Location";
+    }
+
+    // Skapar rätt subklass utifrån kategorin och försöker lägga den i katalogen.
+    private void btnAddProduct_Click(object sender, EventArgs e)
+    {
+        if (cmbProductCategory.SelectedItem == null)
+        {
+            MessageBox.Show("Choose a category first.", "Missing category", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            return;
+        }
+
+        ProductCategory category = (ProductCategory)cmbProductCategory.SelectedItem;
+        string location = txtProductLocation.Text.Trim();
+        decimal basePrice = numProductBasePrice.Value;
+
+        Product product;
+        switch (category)
+        {
+            case ProductCategory.MapFrame:
+                string size = cmbProductSize.SelectedItem as string ?? "Medium";
+                product = new MapFrame(location, size, basePrice);
+                break;
+            case ProductCategory.Keyring:
+                product = new Keyring(location, basePrice, chkProductGiftWrap.Checked);
+                break;
+            case ProductCategory.CustomMap:
+                int complexity = (int)numProductComplexity.Value;
+                product = new CustomMapProduct(location, complexity, basePrice);
+                break;
+            default:
+                return;
+        }
+
+        ValidationResult result = _productService.AddProduct(product);
+        if (!result.IsValid)
+        {
+            MessageBox.Show(result.ToMessage(), "Could not add product", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return;
+        }
+
+        txtProductLocation.Clear();
+        numProductBasePrice.Value = 0;
+        chkProductGiftWrap.Checked = false;
+        numProductComplexity.Value = 1;
+        cmbProductSize.SelectedItem = "Medium";
+
+        LoadProductsIntoUi();
+    }
+
+    // Tar bort den markerade produkten efter en bekräftelseruta.
+    private void btnRemoveProduct_Click(object sender, EventArgs e)
+    {
+        Product selected = lstProducts.SelectedItem as Product;
+        if (selected == null)
+        {
+            MessageBox.Show("Choose a product in the list first.", "No product selected", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            return;
+        }
+
+        DialogResult confirm = MessageBox.Show(
+            $"Remove \"{selected.Name}\" from the catalog?",
+            "Confirm removal",
+            MessageBoxButtons.YesNo,
+            MessageBoxIcon.Question);
+
+        if (confirm != DialogResult.Yes)
+        {
+            return;
+        }
+
+        _productService.RemoveProduct(selected);
+        LoadProductsIntoUi();
     }
 
     // Fyller produktlistan och produktdropdownen från ProductService.

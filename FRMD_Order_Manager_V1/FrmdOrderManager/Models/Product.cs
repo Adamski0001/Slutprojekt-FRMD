@@ -1,7 +1,14 @@
+using System.Text.Json.Serialization;
+
 namespace FrmdOrderManager.Models;
 
 // Basklass för alla produkter. Abstrakt – man måste skapa en MapFrame, Keyring
 // eller CustomMapProduct för att få ett objekt.
+// Product är abstract – JSON vet inte själv vilken subklass varje rad ska bli.
+// Attributen skriver "$type" till varje produkt så inläsningen kan välja rätt.
+[JsonDerivedType(typeof(MapFrame), "MapFrame")]
+[JsonDerivedType(typeof(Keyring), "Keyring")]
+[JsonDerivedType(typeof(CustomMapProduct), "CustomMap")]
 public abstract class Product
 {
     public Guid Id { get; set; } = Guid.NewGuid();

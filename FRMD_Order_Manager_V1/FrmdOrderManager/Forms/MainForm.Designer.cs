@@ -72,6 +72,21 @@ partial class MainForm
         lstCustomers = new ListBox();
         tabProducts = new TabPage();
         lblProductsHeader = new Label();
+        lblProductsListHeader = new Label();
+        lblProductCategory = new Label();
+        lblProductLocation = new Label();
+        lblProductBasePrice = new Label();
+        lblProductSize = new Label();
+        lblProductGiftWrap = new Label();
+        lblProductComplexity = new Label();
+        cmbProductCategory = new ComboBox();
+        txtProductLocation = new TextBox();
+        numProductBasePrice = new NumericUpDown();
+        cmbProductSize = new ComboBox();
+        chkProductGiftWrap = new CheckBox();
+        numProductComplexity = new NumericUpDown();
+        btnAddProduct = new Button();
+        btnRemoveProduct = new Button();
         lstProducts = new ListBox();
         tabOrders = new TabPage();
         lblCustomerPick = new Label();
@@ -98,6 +113,8 @@ partial class MainForm
         tabProducts.SuspendLayout();
         tabOrders.SuspendLayout();
         ((System.ComponentModel.ISupportInitialize)numQuantity).BeginInit();
+        ((System.ComponentModel.ISupportInitialize)numProductBasePrice).BeginInit();
+        ((System.ComponentModel.ISupportInitialize)numProductComplexity).BeginInit();
         ((System.ComponentModel.ISupportInitialize)gridOrders).BeginInit();
         SuspendLayout();
         // 
@@ -289,31 +306,172 @@ partial class MainForm
         lstCustomers.Name = "lstCustomers";
         lstCustomers.Size = new Size(520, 504);
         lstCustomers.TabIndex = 7;
-        // 
+        //
         // tabProducts
-        // 
+        //
         tabProducts.Controls.Add(lblProductsHeader);
+        tabProducts.Controls.Add(lblProductCategory);
+        tabProducts.Controls.Add(cmbProductCategory);
+        tabProducts.Controls.Add(lblProductLocation);
+        tabProducts.Controls.Add(txtProductLocation);
+        tabProducts.Controls.Add(lblProductBasePrice);
+        tabProducts.Controls.Add(numProductBasePrice);
+        tabProducts.Controls.Add(lblProductSize);
+        tabProducts.Controls.Add(cmbProductSize);
+        tabProducts.Controls.Add(lblProductGiftWrap);
+        tabProducts.Controls.Add(chkProductGiftWrap);
+        tabProducts.Controls.Add(lblProductComplexity);
+        tabProducts.Controls.Add(numProductComplexity);
+        tabProducts.Controls.Add(btnAddProduct);
+        tabProducts.Controls.Add(lblProductsListHeader);
         tabProducts.Controls.Add(lstProducts);
+        tabProducts.Controls.Add(btnRemoveProduct);
         tabProducts.Location = new Point(4, 29);
         tabProducts.Name = "tabProducts";
         tabProducts.Size = new Size(1012, 617);
         tabProducts.TabIndex = 2;
         tabProducts.Text = "Products";
-        // 
+        //
         // lblProductsHeader
-        // 
+        //
+        lblProductsHeader.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
         lblProductsHeader.Location = new Point(30, 30);
         lblProductsHeader.Name = "lblProductsHeader";
-        lblProductsHeader.Size = new Size(200, 23);
+        lblProductsHeader.Size = new Size(280, 24);
         lblProductsHeader.TabIndex = 0;
-        lblProductsHeader.Text = "Seeded FRMD products";
-        // 
+        lblProductsHeader.Text = "Add a product";
+        //
+        // lblProductCategory
+        //
+        lblProductCategory.Location = new Point(30, 75);
+        lblProductCategory.Name = "lblProductCategory";
+        lblProductCategory.Size = new Size(140, 23);
+        lblProductCategory.TabIndex = 1;
+        lblProductCategory.Text = "Category";
+        //
+        // cmbProductCategory
+        //
+        cmbProductCategory.DropDownStyle = ComboBoxStyle.DropDownList;
+        cmbProductCategory.Location = new Point(180, 72);
+        cmbProductCategory.Name = "cmbProductCategory";
+        cmbProductCategory.Size = new Size(200, 28);
+        cmbProductCategory.TabIndex = 2;
+        cmbProductCategory.SelectedIndexChanged += cmbProductCategory_SelectedIndexChanged;
+        //
+        // lblProductLocation
+        //
+        lblProductLocation.Location = new Point(30, 115);
+        lblProductLocation.Name = "lblProductLocation";
+        lblProductLocation.Size = new Size(140, 23);
+        lblProductLocation.TabIndex = 3;
+        lblProductLocation.Text = "Location";
+        //
+        // txtProductLocation
+        //
+        txtProductLocation.Location = new Point(180, 112);
+        txtProductLocation.Name = "txtProductLocation";
+        txtProductLocation.Size = new Size(200, 27);
+        txtProductLocation.TabIndex = 4;
+        //
+        // lblProductBasePrice
+        //
+        lblProductBasePrice.Location = new Point(30, 155);
+        lblProductBasePrice.Name = "lblProductBasePrice";
+        lblProductBasePrice.Size = new Size(140, 23);
+        lblProductBasePrice.TabIndex = 5;
+        lblProductBasePrice.Text = "Base price (kr)";
+        //
+        // numProductBasePrice
+        //
+        numProductBasePrice.Location = new Point(180, 152);
+        numProductBasePrice.Maximum = new decimal(new int[] { 100000, 0, 0, 0 });
+        numProductBasePrice.Name = "numProductBasePrice";
+        numProductBasePrice.Size = new Size(200, 27);
+        numProductBasePrice.TabIndex = 6;
+        //
+        // lblProductSize
+        //
+        lblProductSize.Location = new Point(30, 195);
+        lblProductSize.Name = "lblProductSize";
+        lblProductSize.Size = new Size(140, 23);
+        lblProductSize.TabIndex = 7;
+        lblProductSize.Text = "Size";
+        //
+        // cmbProductSize
+        //
+        cmbProductSize.DropDownStyle = ComboBoxStyle.DropDownList;
+        cmbProductSize.Location = new Point(180, 192);
+        cmbProductSize.Name = "cmbProductSize";
+        cmbProductSize.Size = new Size(200, 28);
+        cmbProductSize.TabIndex = 8;
+        //
+        // lblProductGiftWrap
+        //
+        lblProductGiftWrap.Location = new Point(30, 195);
+        lblProductGiftWrap.Name = "lblProductGiftWrap";
+        lblProductGiftWrap.Size = new Size(140, 23);
+        lblProductGiftWrap.TabIndex = 9;
+        lblProductGiftWrap.Text = "Gift packaging";
+        //
+        // chkProductGiftWrap
+        //
+        chkProductGiftWrap.Location = new Point(180, 193);
+        chkProductGiftWrap.Name = "chkProductGiftWrap";
+        chkProductGiftWrap.Size = new Size(200, 24);
+        chkProductGiftWrap.TabIndex = 10;
+        chkProductGiftWrap.Text = "Include gift packaging";
+        //
+        // lblProductComplexity
+        //
+        lblProductComplexity.Location = new Point(30, 195);
+        lblProductComplexity.Name = "lblProductComplexity";
+        lblProductComplexity.Size = new Size(140, 23);
+        lblProductComplexity.TabIndex = 11;
+        lblProductComplexity.Text = "Complexity (1-5)";
+        //
+        // numProductComplexity
+        //
+        numProductComplexity.Location = new Point(180, 192);
+        numProductComplexity.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+        numProductComplexity.Maximum = new decimal(new int[] { 5, 0, 0, 0 });
+        numProductComplexity.Name = "numProductComplexity";
+        numProductComplexity.Size = new Size(200, 27);
+        numProductComplexity.TabIndex = 12;
+        numProductComplexity.Value = new decimal(new int[] { 1, 0, 0, 0 });
+        //
+        // btnAddProduct
+        //
+        btnAddProduct.Location = new Point(180, 240);
+        btnAddProduct.Name = "btnAddProduct";
+        btnAddProduct.Size = new Size(200, 32);
+        btnAddProduct.TabIndex = 13;
+        btnAddProduct.Text = "Add product";
+        btnAddProduct.Click += btnAddProduct_Click;
+        //
+        // lblProductsListHeader
+        //
+        lblProductsListHeader.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+        lblProductsListHeader.Location = new Point(420, 30);
+        lblProductsListHeader.Name = "lblProductsListHeader";
+        lblProductsListHeader.Size = new Size(280, 24);
+        lblProductsListHeader.TabIndex = 14;
+        lblProductsListHeader.Text = "FRMD product catalog";
+        //
         // lstProducts
-        // 
-        lstProducts.Location = new Point(30, 65);
+        //
+        lstProducts.Location = new Point(420, 65);
         lstProducts.Name = "lstProducts";
-        lstProducts.Size = new Size(920, 464);
-        lstProducts.TabIndex = 1;
+        lstProducts.Size = new Size(565, 460);
+        lstProducts.TabIndex = 15;
+        //
+        // btnRemoveProduct
+        //
+        btnRemoveProduct.Location = new Point(420, 540);
+        btnRemoveProduct.Name = "btnRemoveProduct";
+        btnRemoveProduct.Size = new Size(200, 32);
+        btnRemoveProduct.TabIndex = 16;
+        btnRemoveProduct.Text = "Remove selected";
+        btnRemoveProduct.Click += btnRemoveProduct_Click;
         // 
         // tabOrders
         // 
@@ -515,6 +673,8 @@ partial class MainForm
         tabOrders.ResumeLayout(false);
         tabOrders.PerformLayout();
         ((System.ComponentModel.ISupportInitialize)numQuantity).EndInit();
+        ((System.ComponentModel.ISupportInitialize)numProductBasePrice).EndInit();
+        ((System.ComponentModel.ISupportInitialize)numProductComplexity).EndInit();
         ((System.ComponentModel.ISupportInitialize)gridOrders).EndInit();
         ResumeLayout(false);
     }
@@ -524,6 +684,21 @@ partial class MainForm
     private Label lblCustomerEmail;
     private Label lblCustomerPhone;
     private Label lblProductsHeader;
+    private Label lblProductsListHeader;
+    private Label lblProductCategory;
+    private Label lblProductLocation;
+    private Label lblProductBasePrice;
+    private Label lblProductSize;
+    private Label lblProductGiftWrap;
+    private Label lblProductComplexity;
+    private ComboBox cmbProductCategory;
+    private TextBox txtProductLocation;
+    private NumericUpDown numProductBasePrice;
+    private ComboBox cmbProductSize;
+    private CheckBox chkProductGiftWrap;
+    private NumericUpDown numProductComplexity;
+    private Button btnAddProduct;
+    private Button btnRemoveProduct;
     private Label lblCustomerPick;
     private Label lblProductPick;
     private Label lblQuantity;
