@@ -598,7 +598,7 @@ partial class MainForm
         // 
         // gridOrders
         // 
-        gridOrders.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+        gridOrders.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
         gridOrders.ColumnHeadersHeight = 29;
         gridOrders.Location = new Point(430, 28);
         gridOrders.MultiSelect = false;

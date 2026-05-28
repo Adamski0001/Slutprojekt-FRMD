@@ -464,10 +464,11 @@ public partial class MainForm : Form
         HideColumnIfExists("Items");
         HideColumnIfExists("IsActive");
 
+        // Notes-kolumnen får fylla ut resten av tabellens bredd så att långa anteckningar syns.
         if (gridOrders.Columns["Notes"] != null)
         {
-            gridOrders.Columns["Notes"].HeaderText = "Notes";
-            gridOrders.Columns["Notes"].FillWeight = 160;
+            gridOrders.Columns["Notes"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            gridOrders.Columns["Notes"].MinimumWidth = 120;
         }
     }
 
