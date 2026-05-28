@@ -4,7 +4,7 @@ namespace FrmdOrderManager;
 
 internal static class Program
 {
-    // Startpunkten för programmet. Visar formuläret MainForm.
+    // Startpunkten för programmet. Initierar Windows Forms och öppnar huvudfönstret.
     [STAThread]
     private static void Main()
     {

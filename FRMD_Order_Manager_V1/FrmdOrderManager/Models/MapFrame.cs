@@ -6,11 +6,13 @@ public class MapFrame : Product
     public string Location { get; set; } = "";
     public string Size { get; set; } = "Medium";
 
+    // Parameterlös konstruktor för JSON-deserialisering.
     public MapFrame()
     {
         Category = ProductCategory.MapFrame;
     }
 
+    // Skapar en karttavla med plats, storlek och utgångspris.
     public MapFrame(string location, string size, decimal basePrice)
         : base($"{location} Map Frame", basePrice, ProductCategory.MapFrame)
     {
@@ -18,9 +20,9 @@ public class MapFrame : Product
         Size = size;
     }
 
+    // Lägger på ett tillägg på utgångspriset beroende på storleken.
     public override decimal CalculatePrice()
     {
-        // Större karttavlor kostar mer.
         switch (Size)
         {
             case "Small":
@@ -34,6 +36,7 @@ public class MapFrame : Product
         }
     }
 
+    // Beskrivning på formen "Åre topographic frame (Medium)".
     public override string GetDescription()
     {
         return $"{Location} topographic frame ({Size})";

@@ -1,7 +1,7 @@
 namespace FrmdOrderManager.Models;
 
-// En rad i en order. Sparar en kopia av produktens info, så att gamla ordrar
-// fortsätter att visa rätt pris/namn även om produkten ändras senare.
+// En rad i en order. Sparar en kopia av produktens info så att gamla ordrar visar
+// rätt pris/namn även om produkten ändras senare.
 public class OrderItem
 {
     public Guid ProductId { get; set; }
@@ -10,6 +10,7 @@ public class OrderItem
     public int Quantity { get; set; }
     public decimal UnitPrice { get; set; }
 
+    // Totalpriset för raden – antal multiplicerat med styckpriset.
     public decimal LineTotal
     {
         get { return Quantity * UnitPrice; }
@@ -17,9 +18,10 @@ public class OrderItem
 
     public OrderItem() { }
 
+    // Skapar en orderrad utifrån en produkt och ett antal.
     public OrderItem(Product product, int quantity)
     {
-        // Hämtar info från produkten via polymorfism (GetDescription/CalculatePrice).
+        // Beskrivning och pris hämtas via polymorfism – det är subklassens version som körs.
         ProductId = product.Id;
         ProductName = product.Name;
         Description = product.GetDescription();
@@ -27,6 +29,7 @@ public class OrderItem
         UnitPrice = product.CalculatePrice();
     }
 
+    // Text som visas i orderdetaljernas ListBox.
     public override string ToString()
     {
         return $"{Quantity} x {Description} = {LineTotal} kr";

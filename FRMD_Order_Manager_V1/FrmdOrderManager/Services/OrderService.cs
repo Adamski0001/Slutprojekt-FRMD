@@ -3,12 +3,13 @@ using FrmdOrderManager.Models;
 
 namespace FrmdOrderManager.Services;
 
-// Hanterar all logik runt ordrar: skapa, uppdatera status, räkna statistik.
+// Hanterar all orderlogik – skapa, byta status och räkna statistik till dashboarden.
 public class OrderService
 {
     private readonly IRepository<Order> _repository;
     private readonly ValidationService _validationService;
 
+    // Läser in tidigare sparade ordrar från lagringen direkt vid start.
     public OrderService(IRepository<Order> repository, ValidationService validationService)
     {
         _repository = repository;
@@ -16,11 +17,13 @@ public class OrderService
         _repository.Load();
     }
 
+    // Hämtar alla ordrar.
     public List<Order> GetAllOrders()
     {
         return _repository.GetAll();
     }
 
+    // Skapar en ny order. Sparar bara om valideringen går igenom.
     public ValidationResult CreateOrder(Customer customer, Product product, int quantity, string notes)
     {
         ValidationResult result = _validationService.ValidateOrder(customer, product, quantity);
@@ -39,6 +42,7 @@ public class OrderService
         return result;
     }
 
+    // Sätter en ny status på ordern och sparar ändringen direkt.
     public void UpdateStatus(Order order, OrderStatus status)
     {
         order.Status = status;

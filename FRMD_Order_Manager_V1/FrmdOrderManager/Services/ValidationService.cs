@@ -5,6 +5,7 @@ namespace FrmdOrderManager.Services;
 // Samlar valideringsreglerna på ett ställe så att forms-koden slipper kolla själv.
 public class ValidationService
 {
+    // Validerar att en kund har namn och en e-post som åtminstone innehåller @.
     public ValidationResult ValidateCustomer(string name, string email)
     {
         ValidationResult result = new ValidationResult();
@@ -22,6 +23,7 @@ public class ValidationService
         return result;
     }
 
+    // Validerar att en order har kund, produkt och ett positivt antal.
     public ValidationResult ValidateOrder(Customer customer, Product product, int quantity)
     {
         ValidationResult result = new ValidationResult();

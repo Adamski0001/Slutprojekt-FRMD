@@ -11,7 +11,7 @@ public class Order
     public List<OrderItem> Items { get; set; } = new List<OrderItem>();
     public string Notes { get; set; } = "";
 
-    // Räknar ihop totalpriset från alla rader i ordern.
+    // Totalpriset räknas ihop från alla rader i ordern.
     public decimal TotalPrice
     {
         get { return Items.Sum(item => item.LineTotal); }
@@ -26,7 +26,7 @@ public class Order
         }
     }
 
-    // Visar bara första delen av Guid så det blir lättare att läsa i tabellen.
+    // Första 8 tecknen av Id i versaler – lättare att läsa i tabellen.
     public string ShortId
     {
         get
@@ -35,6 +35,7 @@ public class Order
         }
     }
 
+    // Text som visas när ordern listas.
     public override string ToString()
     {
         return $"{ShortId} - {CustomerName} - {Status} - {TotalPrice} kr";

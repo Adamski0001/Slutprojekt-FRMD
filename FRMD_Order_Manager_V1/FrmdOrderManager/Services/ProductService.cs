@@ -2,24 +2,25 @@ using FrmdOrderManager.Models;
 
 namespace FrmdOrderManager.Services;
 
-// Håller en lista över produkterna som FRMD säljer. Just nu fylls listan
-// med exempelprodukter i konstruktorn (seedning), så att programmet alltid
-// har något att visa när det startar.
+// Håller listan över produkterna som FRMD säljer. Fylls i konstruktorn (seedning)
+// så att programmet alltid har något att visa när det startar.
 public class ProductService
 {
     private readonly List<Product> _products = new List<Product>();
 
+    // Skapar tjänsten och fyller listan med standardprodukter.
     public ProductService()
     {
         SeedDefaultProducts();
     }
 
+    // Returnerar hela produktkatalogen.
     public List<Product> GetAllProducts()
     {
         return _products;
     }
 
-    // Skapar produkter genom alla tre subklasser av Product (visar arvet).
+    // Skapar produkter genom alla tre subklasser av Product – visar arvet i praktiken.
     private void SeedDefaultProducts()
     {
         _products.Add(new MapFrame("Åre", "Medium", 799));

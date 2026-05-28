@@ -1,8 +1,7 @@
 namespace FrmdOrderManager.Data;
 
-// Generiskt interface för datalagring. Tanken är att samma kontrakt
-// ska fungera för olika klasser (Customer, Order, ...) utan att man
-// behöver skriva en ny repository-klass för varje typ.
+// Generiskt kontrakt för datalagring. Samma interface fungerar för Customer, Order
+// och andra typer utan att vi behöver en ny repository-klass per typ.
 public interface IRepository<T> where T : class
 {
     List<T> GetAll();

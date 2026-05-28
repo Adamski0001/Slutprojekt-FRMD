@@ -2,18 +2,18 @@ using System.Text.Json;
 
 namespace FrmdOrderManager.Data;
 
-// Generisk JSON-lagring. Sparar och läser en lista med objekt av typ T
-// till en fil. Används både för kunder och ordrar i programmet.
+// Generisk JSON-lagring. Sparar och läser en lista med objekt av typ T till en fil.
 public class JsonRepository<T> : IRepository<T> where T : class
 {
     private readonly string _filePath;
     private readonly JsonSerializerOptions _options;
     private List<T> _items = new List<T>();
 
+    // Skapar lagringen för en specifik fil. Filen behöver inte finnas i förväg.
     public JsonRepository(string filePath)
     {
         _filePath = filePath;
-        // WriteIndented gör att JSON-filen blir lättare att läsa.
+        // WriteIndented gör JSON-filen lättläst om man öppnar den i en texteditor.
         _options = new JsonSerializerOptions
         {
             WriteIndented = true,
@@ -21,26 +21,30 @@ public class JsonRepository<T> : IRepository<T> where T : class
         };
     }
 
+    // Returnerar listan med alla inlästa objekt.
     public List<T> GetAll()
     {
         return _items;
     }
 
+    // Lägger till ett objekt och sparar direkt till disk.
     public void Add(T item)
     {
         _items.Add(item);
         Save();
     }
 
+    // Tar bort ett objekt och sparar direkt till disk.
     public void Remove(T item)
     {
         _items.Remove(item);
         Save();
     }
 
+    // Skriver hela listan till JSON-filen.
     public void Save()
     {
-        // Skapar mappen om den inte finns, annars kraschar File.WriteAllText.
+        // Skapar målmappen om den saknas, annars kraschar File.WriteAllText.
         string directory = Path.GetDirectoryName(_filePath);
         if (!string.IsNullOrWhiteSpace(directory))
         {
@@ -51,9 +55,9 @@ public class JsonRepository<T> : IRepository<T> where T : class
         File.WriteAllText(_filePath, json);
     }
 
+    // Läser in listan från JSON-filen. Skapar en tom fil om den saknas.
     public void Load()
     {
-        // Om filen inte finns startar vi med en tom lista och skapar filen direkt.
         if (!File.Exists(_filePath))
         {
             _items = new List<T>();
@@ -72,8 +76,7 @@ public class JsonRepository<T> : IRepository<T> where T : class
         }
         catch
         {
-            // Om JSON-filen är trasig börjar vi om med en tom lista
-            // i stället för att låta programmet krascha.
+            // Trasig JSON ska inte stoppa programmet – vi börjar om från noll.
             _items = new List<T>();
         }
     }

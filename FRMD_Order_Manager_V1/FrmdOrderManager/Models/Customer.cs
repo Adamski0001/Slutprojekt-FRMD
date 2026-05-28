@@ -1,6 +1,6 @@
 namespace FrmdOrderManager.Models;
 
-// Vanlig modellklass för en kund. Inget arv, bara properties.
+// Modellklass för en kund. Innehåller bara properties, inget arv.
 public class Customer
 {
     public Guid Id { get; set; } = Guid.NewGuid();
@@ -8,8 +8,10 @@ public class Customer
     public string Email { get; set; } = "";
     public string Phone { get; set; } = "";
 
+    // Parameterlös konstruktor för JSON-deserialisering.
     public Customer() { }
 
+    // Skapar en kund med ifyllda kontaktuppgifter.
     public Customer(string name, string email, string phone)
     {
         Name = name;
