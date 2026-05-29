@@ -3,7 +3,7 @@ using FrmdOrderManager.Models;
 
 namespace FrmdOrderManager.Services;
 
-// Hanterar all produktlogik. Speglar CustomerService – ett repository sköter lagringen
+// Hanterar all produktlogik. Speglar CustomerService, ett repository sköter lagringen
 // och ValidationService kontrollerar inmatningen innan något läggs till.
 public class ProductService
 {
@@ -30,20 +30,18 @@ public class ProductService
         return _repository.GetAll();
     }
 
-    // Försöker lägga till en produkt. Sparar bara om valideringen går igenom.
-    public ValidationResult AddProduct(Product product)
+    // Försöker lägga till en produkt. ValidateProduct kastar ValidationException om
+    // inmatningen är ogiltig, annars läggs produkten till i katalogen.
+    public void AddProduct(Product product)
     {
-        ValidationResult result = _validationService.ValidateProduct(product);
-        if (!result.IsValid)
-        {
-            return result;
-        }
+        _validationService.ValidateProduct(product);
 
         _repository.Add(product);
-        return result;
     }
 
-    // Tar bort en produkt från katalogen.
+    // Tar bort en produkt från katalogen. OrderItem sparar produktens namn, pris och beskrivning
+    // som kopior vid skapandet, så befintliga ordrar och dashboard-grafen påverkas INTE när en
+    // produkt försvinner, historiken är intakt.
     public void RemoveProduct(Product product)
     {
         _repository.Remove(product);

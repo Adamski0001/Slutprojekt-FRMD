@@ -1,6 +1,6 @@
 namespace FrmdOrderManager.Models;
 
-// Specialbeställd karta. Komplexitet 1–5 där varje steg lägger på 150 kr.
+// Specialbeställd karta. Komplexitet 1-5 där varje steg lägger på 150 kr.
 public class CustomMapProduct : Product
 {
     public string RequestedLocation { get; set; } = "";

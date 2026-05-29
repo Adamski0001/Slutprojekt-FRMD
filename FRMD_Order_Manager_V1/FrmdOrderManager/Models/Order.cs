@@ -26,7 +26,7 @@ public class Order
         }
     }
 
-    // Första 8 tecknen av Id i versaler – lättare att läsa i tabellen.
+    // Första 8 tecknen av Id i versaler - lättare att läsa i tabellen.
     public string ShortId
     {
         get

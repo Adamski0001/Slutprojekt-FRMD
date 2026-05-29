@@ -23,17 +23,26 @@ public class CustomerService
         return _repository.GetAll();
     }
 
-    // Försöker lägga till en ny kund. Sparar bara om valideringen går igenom.
-    public ValidationResult AddCustomer(string name, string email, string phone)
+    // Lägger till en ny kund. ValidateCustomer kastar ValidationException om namn eller
+    // e-post är ogiltiga, då hoppas Add över och felet bubblar upp till forms-koden.
+    public void AddCustomer(string name, string email, string phone)
     {
-        ValidationResult result = _validationService.ValidateCustomer(name, email);
-        if (!result.IsValid)
-        {
-            return result;
-        }
+        _validationService.ValidateCustomer(name, email);
 
         Customer customer = new Customer(name.Trim(), email.Trim(), phone.Trim());
         _repository.Add(customer);
-        return result;
+    }
+
+    // Uppdaterar en befintlig kund så att en feltaggad e-post inte är permanent.
+    // Sparar bara om de nya värdena är giltiga, annars kastar ValidateCustomer ett
+    // undantag och inget skrivs över.
+    public void UpdateCustomer(Customer customer, string name, string email, string phone)
+    {
+        _validationService.ValidateCustomer(name, email);
+
+        customer.Name = name.Trim();
+        customer.Email = email.Trim();
+        customer.Phone = phone.Trim();
+        _repository.Save();
     }
 }

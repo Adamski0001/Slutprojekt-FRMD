@@ -2,9 +2,10 @@ using System.Text.Json.Serialization;
 
 namespace FrmdOrderManager.Models;
 
-// Basklass för alla produkter. Abstrakt – man måste skapa en MapFrame, Keyring
-// eller CustomMapProduct för att få ett objekt.
-// Product är abstract – JSON vet inte själv vilken subklass varje rad ska bli.
+// Basklass för alla produkter. Product klassen är absktrakt vilket betyder att man måste skapa en MapFrame, Keyring
+// eller CustomMapProduct för att få ett objekt, vilket gör att vi sparar tid när man skapar produkter.
+
+// Product är abstract - JSON vet inte själv vilken subklass varje rad ska bli.
 // Attributen skriver "$type" till varje produkt så inläsningen kan välja rätt.
 [JsonDerivedType(typeof(MapFrame), "MapFrame")]
 [JsonDerivedType(typeof(Keyring), "Keyring")]
@@ -19,7 +20,7 @@ public abstract class Product
     // Parameterlös konstruktor för JSON-deserialisering.
     protected Product() { }
 
-    // Sätter de gemensamma fälten – anropas av subklassernas konstruktorer.
+    // Sätter de gemensamma fälten - anropas av subklassernas konstruktorer.
     protected Product(string name, decimal basePrice, ProductCategory category)
     {
         Name = name;

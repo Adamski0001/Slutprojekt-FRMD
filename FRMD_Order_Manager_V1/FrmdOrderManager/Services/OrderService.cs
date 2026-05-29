@@ -3,7 +3,7 @@ using FrmdOrderManager.Models;
 
 namespace FrmdOrderManager.Services;
 
-// Hanterar all orderlogik – skapa, byta status och räkna statistik till dashboarden.
+// Hanterar all orderlogik. Skapa, byta status och räkna statistik till dashboarden.
 public class OrderService
 {
     private readonly IRepository<Order> _repository;
@@ -23,14 +23,11 @@ public class OrderService
         return _repository.GetAll();
     }
 
-    // Skapar en ny order. Sparar bara om valideringen går igenom.
-    public ValidationResult CreateOrder(Customer customer, Product product, int quantity, string notes)
+    // Skapar en ny order. ValidateOrder kastar ValidationException om kund, produkt
+    // eller antal saknas, då skapas ingen order och felet bubblar upp till forms-koden.
+    public void CreateOrder(Customer customer, Product product, int quantity, string notes)
     {
-        ValidationResult result = _validationService.ValidateOrder(customer, product, quantity);
-        if (!result.IsValid)
-        {
-            return result;
-        }
+        _validationService.ValidateOrder(customer, product, quantity);
 
         Order order = new Order();
         order.CustomerId = customer.Id;
@@ -39,7 +36,6 @@ public class OrderService
         order.Items.Add(new OrderItem(product, quantity));
 
         _repository.Add(order);
-        return result;
     }
 
     // Sätter en ny status på ordern och sparar ändringen direkt.
@@ -47,6 +43,12 @@ public class OrderService
     {
         order.Status = status;
         _repository.Save();
+    }
+
+    // Tar bort en order helt från lagringen. Anropas när användaren trycker Delete på en markerad rad.
+    public void DeleteOrder(Order order)
+    {
+        _repository.Remove(order);
     }
 
     // Räknar ihop värdet på alla ordrar som inte är avbrutna.

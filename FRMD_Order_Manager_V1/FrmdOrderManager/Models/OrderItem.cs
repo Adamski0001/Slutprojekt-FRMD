@@ -10,7 +10,7 @@ public class OrderItem
     public int Quantity { get; set; }
     public decimal UnitPrice { get; set; }
 
-    // Totalpriset för raden – antal multiplicerat med styckpriset.
+    // Totalpriset för raden - antal multiplicerat med styckpriset.
     public decimal LineTotal
     {
         get { return Quantity * UnitPrice; }
@@ -21,7 +21,7 @@ public class OrderItem
     // Skapar en orderrad utifrån en produkt och ett antal.
     public OrderItem(Product product, int quantity)
     {
-        // Beskrivning och pris hämtas via polymorfism – det är subklassens version som körs.
+        // Beskrivning och pris hämtas via polymorfism - det är subklassens version som körs.
         ProductId = product.Id;
         ProductName = product.Name;
         Description = product.GetDescription();

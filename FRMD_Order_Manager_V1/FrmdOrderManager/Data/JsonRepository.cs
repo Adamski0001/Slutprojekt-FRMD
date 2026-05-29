@@ -76,7 +76,7 @@ public class JsonRepository<T> : IRepository<T> where T : class
         }
         catch
         {
-            // Trasig JSON ska inte stoppa programmet – vi börjar om från noll.
+            // Trasig JSON ska inte stoppa programmet - vi börjar om från noll.
             _items = new List<T>();
         }
     }

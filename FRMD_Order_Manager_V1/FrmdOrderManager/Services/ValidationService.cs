@@ -2,102 +2,112 @@ using FrmdOrderManager.Models;
 
 namespace FrmdOrderManager.Services;
 
-// Samlar valideringsreglerna på ett ställe så att forms-koden slipper kolla själv.
+// Samlar valideringsreglerna på ett ställe. Vid ogiltig indata kastas ett
+// ValidationException som services och forms-koden fångar med try-catch.
 public class ValidationService
 {
     // Validerar att en kund har namn och en e-post som åtminstone innehåller @.
-    public ValidationResult ValidateCustomer(string name, string email)
+    public void ValidateCustomer(string name, string email)
     {
-        ValidationResult result = new ValidationResult();
+        List<string> errors = new List<string>();
 
         if (string.IsNullOrWhiteSpace(name))
         {
-            result.AddError("Customer name is required.");
+            errors.Add("Customer name is required.");
         }
 
         if (string.IsNullOrWhiteSpace(email) || !email.Contains("@"))
         {
-            result.AddError("A valid email address is required.");
+            errors.Add("A valid email address is required.");
         }
 
-        return result;
+        if (errors.Count > 0)
+        {
+            throw new ValidationException(errors);
+        }
     }
 
     // Validerar en produkt innan den läggs till i katalogen. Reglerna är gemensamma
     // (namn + pris) plus subklass-specifika kontroller via pattern matching.
-    public ValidationResult ValidateProduct(Product product)
+    public void ValidateProduct(Product product)
     {
-        ValidationResult result = new ValidationResult();
-
+        // Saknas produkten helt finns det inget mer att validera - kasta direkt.
         if (product == null)
         {
-            result.AddError("Product is missing.");
-            return result;
+            throw new ValidationException("Product is missing.");
         }
+
+        List<string> errors = new List<string>();
 
         if (string.IsNullOrWhiteSpace(product.Name))
         {
-            result.AddError("Product name is required.");
+            errors.Add("Product name is required.");
         }
 
-        if (product.BasePrice < 0)
+        if (product.BasePrice <= 0)
         {
-            result.AddError("Base price cannot be negative.");
+            errors.Add("Base price must be greater than 0.");
         }
 
         if (product is MapFrame mapFrame)
         {
             if (string.IsNullOrWhiteSpace(mapFrame.Location))
             {
-                result.AddError("Map frame location is required.");
+                errors.Add("Map frame location is required.");
             }
             if (mapFrame.Size != "Small" && mapFrame.Size != "Medium" && mapFrame.Size != "Large")
             {
-                result.AddError("Size must be Small, Medium or Large.");
+                errors.Add("Size must be Small, Medium or Large.");
             }
         }
         else if (product is Keyring keyring)
         {
             if (string.IsNullOrWhiteSpace(keyring.Location))
             {
-                result.AddError("Keyring location is required.");
+                errors.Add("Keyring location is required.");
             }
         }
         else if (product is CustomMapProduct customMap)
         {
             if (string.IsNullOrWhiteSpace(customMap.RequestedLocation))
             {
-                result.AddError("Requested location is required.");
+                errors.Add("Requested location is required.");
             }
             if (customMap.DesignComplexity < 1 || customMap.DesignComplexity > 5)
             {
-                result.AddError("Design complexity must be between 1 and 5.");
+                errors.Add("Design complexity must be between 1 and 5.");
             }
         }
 
-        return result;
+        if (errors.Count > 0)
+        {
+            throw new ValidationException(errors);
+        }
     }
 
     // Validerar att en order har kund, produkt och ett positivt antal.
-    public ValidationResult ValidateOrder(Customer customer, Product product, int quantity)
+    public void ValidateOrder(Customer customer, Product product, int quantity)
     {
-        ValidationResult result = new ValidationResult();
+        List<string> errors = new List<string>();
 
         if (customer == null)
         {
-            result.AddError("Choose a customer before creating an order.");
+            errors.Add("Choose a customer before creating an order.");
         }
 
         if (product == null)
         {
-            result.AddError("Choose a product before creating an order.");
+            errors.Add("Choose a product before creating an order.");
         }
 
         if (quantity < 1)
         {
-            result.AddError("Quantity must be at least 1.");
+            errors.Add("Quantity must be at least 1.");
         }
 
-        return result;
+        if (errors.Count > 0)
+        {
+            throw new ValidationException(errors);
+        }
     }
 }
