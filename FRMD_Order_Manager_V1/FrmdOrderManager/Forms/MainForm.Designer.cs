@@ -55,6 +55,7 @@ partial class MainForm
     {
         tabMain = new TabControl();
         tabDashboard = new TabPage();
+        linkLabel1 = new LinkLabel();
         lblTitle = new Label();
         lblTotalOrders = new Label();
         lblTotalOrdersValue = new Label();
@@ -64,6 +65,7 @@ partial class MainForm
         lblInProductionValue = new Label();
         lblTotalSales = new Label();
         lblTotalSalesValue = new Label();
+        pnlRevenueChart = new RevenueChartPanel();
         tabCustomers = new TabPage();
         lblCustomerName = new Label();
         lblCustomerEmail = new Label();
@@ -78,22 +80,23 @@ partial class MainForm
         lstCustomers = new ListBox();
         tabProducts = new TabPage();
         lblProductsHeader = new Label();
-        lblProductsListHeader = new Label();
         lblProductCategory = new Label();
-        lblProductLocation = new Label();
-        lblProductBasePrice = new Label();
-        lblProductSize = new Label();
-        lblProductGiftWrap = new Label();
-        lblProductComplexity = new Label();
         cmbProductCategory = new ComboBox();
+        lblProductLocation = new Label();
         txtProductLocation = new TextBox();
+        lblProductBasePrice = new Label();
         numProductBasePrice = new NumericUpDown();
+        lblProductSize = new Label();
         cmbProductSize = new ComboBox();
+        lblProductGiftWrap = new Label();
         chkProductGiftWrap = new CheckBox();
+        lblProductComplexity = new Label();
         numProductComplexity = new NumericUpDown();
         btnAddProduct = new Button();
-        btnRemoveProduct = new Button();
+        lblProductsListHeader = new Label();
         lstProducts = new ListBox();
+        btnRemoveProduct = new Button();
+        lblProductsDeleteHint = new Label();
         tabOrders = new TabPage();
         lblCustomerPick = new Label();
         lblProductPick = new Label();
@@ -106,8 +109,6 @@ partial class MainForm
         lblOrderTotalValue = new Label();
         lblOrderStatusMessage = new Label();
         lblOrdersDeleteHint = new Label();
-        lblProductsDeleteHint = new Label();
-        pnlRevenueChart = new RevenueChartPanel();
         cmbOrderCustomer = new ComboBox();
         cmbOrderProduct = new ComboBox();
         numQuantity = new NumericUpDown();
@@ -118,15 +119,14 @@ partial class MainForm
         txtSelectedOrderNotes = new TextBox();
         cmbStatus = new ComboBox();
         btnUpdateStatus = new Button();
-        linkLabel1 = new LinkLabel();
         tabMain.SuspendLayout();
         tabDashboard.SuspendLayout();
         tabCustomers.SuspendLayout();
         tabProducts.SuspendLayout();
-        tabOrders.SuspendLayout();
-        ((System.ComponentModel.ISupportInitialize)numQuantity).BeginInit();
         ((System.ComponentModel.ISupportInitialize)numProductBasePrice).BeginInit();
         ((System.ComponentModel.ISupportInitialize)numProductComplexity).BeginInit();
+        tabOrders.SuspendLayout();
+        ((System.ComponentModel.ISupportInitialize)numQuantity).BeginInit();
         ((System.ComponentModel.ISupportInitialize)gridOrders).BeginInit();
         SuspendLayout();
         // 
@@ -140,7 +140,7 @@ partial class MainForm
         tabMain.Location = new Point(0, 0);
         tabMain.Name = "tabMain";
         tabMain.SelectedIndex = 0;
-        tabMain.Size = new Size(1100, 650);
+        tabMain.Size = new Size(1220, 650);
         tabMain.TabIndex = 0;
         // 
         // tabDashboard
@@ -156,11 +156,23 @@ partial class MainForm
         tabDashboard.Controls.Add(lblTotalSales);
         tabDashboard.Controls.Add(lblTotalSalesValue);
         tabDashboard.Controls.Add(pnlRevenueChart);
-        tabDashboard.Location = new Point(4, 29);
+        tabDashboard.Location = new Point(4, 24);
         tabDashboard.Name = "tabDashboard";
-        tabDashboard.Size = new Size(1012, 617);
+        tabDashboard.Size = new Size(1212, 622);
         tabDashboard.TabIndex = 0;
         tabDashboard.Text = "Dashboard";
+        // 
+        // linkLabel1
+        // 
+        linkLabel1.AutoSize = true;
+        linkLabel1.Font = new Font("Segoe UI", 13.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
+        linkLabel1.Location = new Point(40, 360);
+        linkLabel1.Name = "linkLabel1";
+        linkLabel1.Size = new Size(74, 25);
+        linkLabel1.TabIndex = 9;
+        linkLabel1.TabStop = true;
+        linkLabel1.Text = "frmd.se";
+        linkLabel1.LinkClicked += linkLabel1_LinkClicked;
         // 
         // lblTitle
         // 
@@ -242,13 +254,15 @@ partial class MainForm
         lblTotalSalesValue.Size = new Size(200, 35);
         lblTotalSalesValue.TabIndex = 8;
         lblTotalSalesValue.Text = "0 kr";
-        //
+        // 
         // pnlRevenueChart
-        //
+        // 
         pnlRevenueChart.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+        pnlRevenueChart.BackColor = Color.White;
+        pnlRevenueChart.BorderStyle = BorderStyle.FixedSingle;
         pnlRevenueChart.Location = new Point(500, 100);
         pnlRevenueChart.Name = "pnlRevenueChart";
-        pnlRevenueChart.Size = new Size(600, 320);
+        pnlRevenueChart.Size = new Size(672, 320);
         pnlRevenueChart.TabIndex = 10;
         // 
         // tabCustomers
@@ -264,9 +278,9 @@ partial class MainForm
         tabCustomers.Controls.Add(btnClearCustomerForm);
         tabCustomers.Controls.Add(lblCustomerStatusMessage);
         tabCustomers.Controls.Add(lstCustomers);
-        tabCustomers.Location = new Point(4, 29);
+        tabCustomers.Location = new Point(4, 24);
         tabCustomers.Name = "tabCustomers";
-        tabCustomers.Size = new Size(1012, 617);
+        tabCustomers.Size = new Size(1212, 622);
         tabCustomers.TabIndex = 1;
         tabCustomers.Text = "Customers";
         // 
@@ -298,21 +312,21 @@ partial class MainForm
         // 
         txtCustomerName.Location = new Point(130, 28);
         txtCustomerName.Name = "txtCustomerName";
-        txtCustomerName.Size = new Size(260, 27);
+        txtCustomerName.Size = new Size(260, 23);
         txtCustomerName.TabIndex = 3;
         // 
         // txtCustomerEmail
         // 
         txtCustomerEmail.Location = new Point(130, 68);
         txtCustomerEmail.Name = "txtCustomerEmail";
-        txtCustomerEmail.Size = new Size(260, 27);
+        txtCustomerEmail.Size = new Size(260, 23);
         txtCustomerEmail.TabIndex = 4;
         // 
         // txtCustomerPhone
         // 
         txtCustomerPhone.Location = new Point(130, 108);
         txtCustomerPhone.Name = "txtCustomerPhone";
-        txtCustomerPhone.Size = new Size(260, 27);
+        txtCustomerPhone.Size = new Size(260, 23);
         txtCustomerPhone.TabIndex = 5;
         // 
         // btnAddCustomer
@@ -351,13 +365,13 @@ partial class MainForm
         lblCustomerStatusMessage.Name = "lblCustomerStatusMessage";
         lblCustomerStatusMessage.Size = new Size(490, 23);
         lblCustomerStatusMessage.TabIndex = 9;
-        lblCustomerStatusMessage.Text = string.Empty;
         // 
         // lstCustomers
         // 
+        lstCustomers.ItemHeight = 15;
         lstCustomers.Location = new Point(560, 28);
         lstCustomers.Name = "lstCustomers";
-        lstCustomers.Size = new Size(490, 504);
+        lstCustomers.Size = new Size(490, 499);
         lstCustomers.TabIndex = 10;
         lstCustomers.SelectedIndexChanged += lstCustomers_SelectedIndexChanged;
         // 
@@ -381,9 +395,9 @@ partial class MainForm
         tabProducts.Controls.Add(lstProducts);
         tabProducts.Controls.Add(btnRemoveProduct);
         tabProducts.Controls.Add(lblProductsDeleteHint);
-        tabProducts.Location = new Point(4, 29);
+        tabProducts.Location = new Point(4, 24);
         tabProducts.Name = "tabProducts";
-        tabProducts.Size = new Size(1012, 617);
+        tabProducts.Size = new Size(1212, 622);
         tabProducts.TabIndex = 2;
         tabProducts.Text = "Products";
         // 
@@ -409,7 +423,7 @@ partial class MainForm
         cmbProductCategory.DropDownStyle = ComboBoxStyle.DropDownList;
         cmbProductCategory.Location = new Point(180, 72);
         cmbProductCategory.Name = "cmbProductCategory";
-        cmbProductCategory.Size = new Size(200, 28);
+        cmbProductCategory.Size = new Size(200, 23);
         cmbProductCategory.TabIndex = 2;
         cmbProductCategory.SelectedIndexChanged += cmbProductCategory_SelectedIndexChanged;
         // 
@@ -425,7 +439,7 @@ partial class MainForm
         // 
         txtProductLocation.Location = new Point(180, 112);
         txtProductLocation.Name = "txtProductLocation";
-        txtProductLocation.Size = new Size(200, 27);
+        txtProductLocation.Size = new Size(200, 23);
         txtProductLocation.TabIndex = 4;
         // 
         // lblProductBasePrice
@@ -441,7 +455,7 @@ partial class MainForm
         numProductBasePrice.Location = new Point(180, 152);
         numProductBasePrice.Maximum = new decimal(new int[] { 100000, 0, 0, 0 });
         numProductBasePrice.Name = "numProductBasePrice";
-        numProductBasePrice.Size = new Size(200, 27);
+        numProductBasePrice.Size = new Size(200, 23);
         numProductBasePrice.TabIndex = 6;
         // 
         // lblProductSize
@@ -457,7 +471,7 @@ partial class MainForm
         cmbProductSize.DropDownStyle = ComboBoxStyle.DropDownList;
         cmbProductSize.Location = new Point(180, 192);
         cmbProductSize.Name = "cmbProductSize";
-        cmbProductSize.Size = new Size(200, 28);
+        cmbProductSize.Size = new Size(200, 23);
         cmbProductSize.TabIndex = 8;
         // 
         // lblProductGiftWrap
@@ -487,10 +501,10 @@ partial class MainForm
         // numProductComplexity
         // 
         numProductComplexity.Location = new Point(180, 192);
-        numProductComplexity.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
         numProductComplexity.Maximum = new decimal(new int[] { 5, 0, 0, 0 });
+        numProductComplexity.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
         numProductComplexity.Name = "numProductComplexity";
-        numProductComplexity.Size = new Size(200, 27);
+        numProductComplexity.Size = new Size(200, 23);
         numProductComplexity.TabIndex = 12;
         numProductComplexity.Value = new decimal(new int[] { 1, 0, 0, 0 });
         // 
@@ -514,9 +528,10 @@ partial class MainForm
         // 
         // lstProducts
         // 
+        lstProducts.ItemHeight = 15;
         lstProducts.Location = new Point(420, 65);
         lstProducts.Name = "lstProducts";
-        lstProducts.Size = new Size(565, 460);
+        lstProducts.Size = new Size(565, 454);
         lstProducts.TabIndex = 15;
         lstProducts.KeyDown += lstProducts_KeyDown;
         // 
@@ -528,14 +543,14 @@ partial class MainForm
         btnRemoveProduct.TabIndex = 16;
         btnRemoveProduct.Text = "Remove selected";
         btnRemoveProduct.Click += btnRemoveProduct_Click;
-        //
-        // lblProductsDeleteHint - under Remove-knappen, full bredd så texten aldrig klipps.
-        //
+        // 
+        // lblProductsDeleteHint
+        // 
         lblProductsDeleteHint.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
         lblProductsDeleteHint.Font = new Font("Segoe UI", 8.5F, FontStyle.Italic);
         lblProductsDeleteHint.Location = new Point(420, 580);
         lblProductsDeleteHint.Name = "lblProductsDeleteHint";
-        lblProductsDeleteHint.Size = new Size(565, 18);
+        lblProductsDeleteHint.Size = new Size(765, 18);
         lblProductsDeleteHint.TabIndex = 17;
         lblProductsDeleteHint.Text = "Tip: press Delete on the keyboard to remove the selected product.";
         // 
@@ -562,9 +577,9 @@ partial class MainForm
         tabOrders.Controls.Add(txtSelectedOrderNotes);
         tabOrders.Controls.Add(cmbStatus);
         tabOrders.Controls.Add(btnUpdateStatus);
-        tabOrders.Location = new Point(4, 29);
+        tabOrders.Location = new Point(4, 24);
         tabOrders.Name = "tabOrders";
-        tabOrders.Size = new Size(1092, 617);
+        tabOrders.Size = new Size(1212, 622);
         tabOrders.TabIndex = 3;
         tabOrders.Text = "Orders";
         // 
@@ -606,7 +621,7 @@ partial class MainForm
         lblOrderDetails.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
         lblOrderDetails.Location = new Point(430, 345);
         lblOrderDetails.Name = "lblOrderDetails";
-        lblOrderDetails.Size = new Size(650, 23);
+        lblOrderDetails.Size = new Size(770, 23);
         lblOrderDetails.TabIndex = 4;
         lblOrderDetails.Text = "Order details";
         // 
@@ -626,42 +641,9 @@ partial class MainForm
         lblStatus.TabIndex = 6;
         lblStatus.Text = "Status";
         // 
-        // cmbOrderCustomer
-        // 
-        cmbOrderCustomer.DropDownStyle = ComboBoxStyle.DropDownList;
-        cmbOrderCustomer.Location = new Point(130, 28);
-        cmbOrderCustomer.Name = "cmbOrderCustomer";
-        cmbOrderCustomer.Size = new Size(280, 28);
-        cmbOrderCustomer.TabIndex = 7;
-        // 
-        // cmbOrderProduct
-        // 
-        cmbOrderProduct.DropDownStyle = ComboBoxStyle.DropDownList;
-        cmbOrderProduct.Location = new Point(130, 68);
-        cmbOrderProduct.Name = "cmbOrderProduct";
-        cmbOrderProduct.Size = new Size(280, 28);
-        cmbOrderProduct.TabIndex = 8;
-        // 
-        // numQuantity
-        // 
-        numQuantity.Location = new Point(130, 108);
-        numQuantity.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
-        numQuantity.Name = "numQuantity";
-        numQuantity.Size = new Size(120, 27);
-        numQuantity.TabIndex = 9;
-        numQuantity.Value = new decimal(new int[] { 1, 0, 0, 0 });
-        // 
-        // txtOrderNotes
-        // 
-        txtOrderNotes.Location = new Point(130, 148);
-        txtOrderNotes.Multiline = true;
-        txtOrderNotes.Name = "txtOrderNotes";
-        txtOrderNotes.Size = new Size(280, 70);
-        txtOrderNotes.TabIndex = 10;
-        // 
         // lblOrderTotalText
         // 
-        lblOrderTotalText.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
+        lblOrderTotalText.Font = new Font("Segoe UI", 10F);
         lblOrderTotalText.Location = new Point(30, 240);
         lblOrderTotalText.Name = "lblOrderTotalText";
         lblOrderTotalText.Size = new Size(100, 23);
@@ -677,6 +659,57 @@ partial class MainForm
         lblOrderTotalValue.TabIndex = 18;
         lblOrderTotalValue.Text = "0 kr";
         // 
+        // lblOrderStatusMessage
+        // 
+        lblOrderStatusMessage.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+        lblOrderStatusMessage.Location = new Point(30, 320);
+        lblOrderStatusMessage.Name = "lblOrderStatusMessage";
+        lblOrderStatusMessage.Size = new Size(380, 23);
+        lblOrderStatusMessage.TabIndex = 19;
+        // 
+        // lblOrdersDeleteHint
+        // 
+        lblOrdersDeleteHint.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+        lblOrdersDeleteHint.Font = new Font("Segoe UI", 8.5F, FontStyle.Italic);
+        lblOrdersDeleteHint.Location = new Point(430, 30);
+        lblOrdersDeleteHint.Name = "lblOrdersDeleteHint";
+        lblOrdersDeleteHint.Size = new Size(770, 18);
+        lblOrdersDeleteHint.TabIndex = 20;
+        lblOrdersDeleteHint.Text = "Tip: press Delete on the keyboard to remove the selected order.";
+        // 
+        // cmbOrderCustomer
+        // 
+        cmbOrderCustomer.DropDownStyle = ComboBoxStyle.DropDownList;
+        cmbOrderCustomer.Location = new Point(130, 28);
+        cmbOrderCustomer.Name = "cmbOrderCustomer";
+        cmbOrderCustomer.Size = new Size(280, 23);
+        cmbOrderCustomer.TabIndex = 7;
+        // 
+        // cmbOrderProduct
+        // 
+        cmbOrderProduct.DropDownStyle = ComboBoxStyle.DropDownList;
+        cmbOrderProduct.Location = new Point(130, 68);
+        cmbOrderProduct.Name = "cmbOrderProduct";
+        cmbOrderProduct.Size = new Size(280, 23);
+        cmbOrderProduct.TabIndex = 8;
+        // 
+        // numQuantity
+        // 
+        numQuantity.Location = new Point(130, 108);
+        numQuantity.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+        numQuantity.Name = "numQuantity";
+        numQuantity.Size = new Size(120, 23);
+        numQuantity.TabIndex = 9;
+        numQuantity.Value = new decimal(new int[] { 1, 0, 0, 0 });
+        // 
+        // txtOrderNotes
+        // 
+        txtOrderNotes.Location = new Point(130, 148);
+        txtOrderNotes.Multiline = true;
+        txtOrderNotes.Name = "txtOrderNotes";
+        txtOrderNotes.Size = new Size(280, 70);
+        txtOrderNotes.TabIndex = 10;
+        // 
         // btnCreateOrder
         // 
         btnCreateOrder.Location = new Point(130, 275);
@@ -685,15 +718,6 @@ partial class MainForm
         btnCreateOrder.TabIndex = 11;
         btnCreateOrder.Text = "Create order";
         btnCreateOrder.Click += btnCreateOrder_Click;
-        // 
-        // lblOrderStatusMessage
-        // 
-        lblOrderStatusMessage.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-        lblOrderStatusMessage.Location = new Point(30, 320);
-        lblOrderStatusMessage.Name = "lblOrderStatusMessage";
-        lblOrderStatusMessage.Size = new Size(380, 23);
-        lblOrderStatusMessage.TabIndex = 19;
-        lblOrderStatusMessage.Text = string.Empty;
         // 
         // gridOrders
         // 
@@ -708,26 +732,17 @@ partial class MainForm
         gridOrders.RowHeadersWidth = 51;
         gridOrders.ScrollBars = ScrollBars.Vertical;
         gridOrders.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-        gridOrders.Size = new Size(650, 278);
+        gridOrders.Size = new Size(770, 278);
         gridOrders.TabIndex = 12;
         gridOrders.SelectionChanged += gridOrders_SelectionChanged;
-        //
-        // lblOrdersDeleteHint - ovanför gridden så att den inte kolliderar med "Order details"-rubriken.
-        //
-        lblOrdersDeleteHint.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-        lblOrdersDeleteHint.Font = new Font("Segoe UI", 8.5F, FontStyle.Italic);
-        lblOrdersDeleteHint.Location = new Point(430, 30);
-        lblOrdersDeleteHint.Name = "lblOrdersDeleteHint";
-        lblOrdersDeleteHint.Size = new Size(650, 18);
-        lblOrdersDeleteHint.TabIndex = 20;
-        lblOrdersDeleteHint.Text = "Tip: press Delete on the keyboard to remove the selected order.";
         // 
         // lstOrderDetails
         // 
         lstOrderDetails.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+        lstOrderDetails.ItemHeight = 15;
         lstOrderDetails.Location = new Point(430, 375);
         lstOrderDetails.Name = "lstOrderDetails";
-        lstOrderDetails.Size = new Size(650, 64);
+        lstOrderDetails.Size = new Size(770, 64);
         lstOrderDetails.TabIndex = 13;
         // 
         // txtSelectedOrderNotes
@@ -738,7 +753,7 @@ partial class MainForm
         txtSelectedOrderNotes.Multiline = true;
         txtSelectedOrderNotes.Name = "txtSelectedOrderNotes";
         txtSelectedOrderNotes.ReadOnly = true;
-        txtSelectedOrderNotes.Size = new Size(650, 50);
+        txtSelectedOrderNotes.Size = new Size(770, 50);
         txtSelectedOrderNotes.TabIndex = 14;
         // 
         // cmbStatus
@@ -746,7 +761,7 @@ partial class MainForm
         cmbStatus.DropDownStyle = ComboBoxStyle.DropDownList;
         cmbStatus.Location = new Point(540, 548);
         cmbStatus.Name = "cmbStatus";
-        cmbStatus.Size = new Size(170, 28);
+        cmbStatus.Size = new Size(170, 23);
         cmbStatus.TabIndex = 15;
         // 
         // btnUpdateStatus
@@ -757,18 +772,6 @@ partial class MainForm
         btnUpdateStatus.TabIndex = 16;
         btnUpdateStatus.Text = "Update status";
         btnUpdateStatus.Click += btnUpdateStatus_Click;
-        // 
-        // linkLabel1
-        // 
-        linkLabel1.AutoSize = true;
-        linkLabel1.Font = new Font("Segoe UI", 13.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
-        linkLabel1.Location = new Point(40, 360);
-        linkLabel1.Name = "linkLabel1";
-        linkLabel1.Size = new Size(90, 31);
-        linkLabel1.TabIndex = 9;
-        linkLabel1.TabStop = true;
-        linkLabel1.Text = "frmd.se";
-        linkLabel1.LinkClicked += linkLabel1_LinkClicked;
         // 
         // MainForm
         // 
@@ -784,11 +787,12 @@ partial class MainForm
         tabCustomers.ResumeLayout(false);
         tabCustomers.PerformLayout();
         tabProducts.ResumeLayout(false);
+        tabProducts.PerformLayout();
+        ((System.ComponentModel.ISupportInitialize)numProductBasePrice).EndInit();
+        ((System.ComponentModel.ISupportInitialize)numProductComplexity).EndInit();
         tabOrders.ResumeLayout(false);
         tabOrders.PerformLayout();
         ((System.ComponentModel.ISupportInitialize)numQuantity).EndInit();
-        ((System.ComponentModel.ISupportInitialize)numProductBasePrice).EndInit();
-        ((System.ComponentModel.ISupportInitialize)numProductComplexity).EndInit();
         ((System.ComponentModel.ISupportInitialize)gridOrders).EndInit();
         ResumeLayout(false);
     }
